@@ -12,7 +12,6 @@ Name   DataType Length Primary Key Nullable Default Value
 
 ----------------------------------------------------------
 Email  Text     250 .  Yes         No
-
 Gender Text .   60
 
 ----------------------------------------------------------
@@ -20,16 +19,22 @@ Gender Text .   60
 Step2:
 -----
 In this Step, we will create an installed package in salesforce Marketing cloud org (under setup).
+
 Then add component anc choose API integration and save. Make sure that Integration Type is Server-to-Server.
+
 Keep a note of Client Id, Client Secret and JWT Signing Secret.
 
 ------------------------
 Step3:
 -----
 Having all the required creds form step2, we will first have to get the auth token as in the link below:
+
 https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/access-token-s2s.htm
+
 The post request here would be to  https://mcmxxxxxxxxxx.auth.marketingcloudapis.com/
+
 Request format:
+
 {
 "grant_type": "client_credentials",
 "client_id": "7a9j47upktedde30uedl822p",
@@ -37,6 +42,7 @@ Request format:
 "scope": "email_read email_write email_send",
 "account_id": "12345"
 }
+
 this will return you access token as follows:
 
 {
@@ -53,17 +59,21 @@ Step4:
 -----
 
 Then use the token in the header to insert data into DataExtention as explained in link below.
+
 https://developer.salesforce.com/docs/atlas.en-us.noversion.mc-apis.meta/mc-apis/insertDataExtensionIDAsync.htm
 
-Set header to
+Set header to:
+
 [{"key":"Content-Type","value":"application/json","description":""},
 {"key":"Authorization","value":"Bearer authTokenFromStep2",
 "description":""}]
 
 Post URL:
+
 Host: https://mcxxxxxxx.rest.marketingcloudapis.com/data/v1/async/dataextensions/key:ExternalKey123/rows
 
 Request body format:
+
 [{
 	"keys":{
 		"Email": "someone@example.com"
