@@ -92,13 +92,11 @@ Request body format:
 }
 ]
 ------------------------------------
-Step5:
-------
 
 Check the marketing cloud org and the data should be inseterd in the Data extension.
 
 ---------------------------------------------------POSTMAN ------------------------------------------------------------
-
+-
 Could implent the same from PostMan client:
 
 Step1:
