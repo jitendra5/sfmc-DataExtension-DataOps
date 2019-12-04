@@ -5,19 +5,27 @@ This example attempts to insert data into Marketing cloud Data Extension from an
 Step1:
 create a Data Extension in SFMC say TestDE.
 Save its EXTERNAL KEY for step3 (say EXTERNALKEY123).
+
 ----------------------------------------------------------
+
 Name   DataType Length Primary Key Nullable Default Value
+
 ----------------------------------------------------------
 Email  Text     250 .  Yes         No
+
 Gender Text .   60
+
 ----------------------------------------------------------
 
 Step2:
+-----
 In this Step, we will create an installed package in salesforce Marketing cloud org (under setup).
 Then add component anc choose API integration and save. Make sure that Integration Type is Server-to-Server.
 Keep a note of Client Id, Client Secret and JWT Signing Secret.
+
 ------------------------
 Step3:
+-----
 Having all the required creds form step2, we will first have to get the auth token as in the link below:
 https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/access-token-s2s.htm
 The post request here would be to  https://mcmxxxxxxxxxx.auth.marketingcloudapis.com/
@@ -32,15 +40,18 @@ Request format:
 this will return you access token as follows:
 
 {
-    "access_token": "eyJhbGciOiJIUzI1NiIsImtpZCI6IjEiLCJ2ZXIiOiIxIiwidHlwIjoiSldUIn0.eyJhY2Nlc3NfdG9rZW4iOiJaYXNGZXJ3dHBuTVcxTVk4M2JIU1NLcjIiLCJjbGllbnRfaWQiOiI5NWpjMTAxYWc1emNmMDljMW5rcWhwcTQiLCJlaWQiOjEwMDAxOTQyNCwic3RhY2tfa2V5IjoiUzEwIiwicGxhdGZvcm1fdmVyc2lvbiI6MiwiY2xpZW50X3R5cGUiOiJTZXJ2ZXJUb1NlcnZlciJ9.D2JFbnys99yINAYZzqVPnA5p6RoVlZBdQ96CP_tgVHM.lVwFRPSY0r5sAsOCiwFaMs9rGXoZC1MObGCepOCESQCKN4X6QbYjHJvQQuMIJO4zpJq4Hu2roYkJ9tiU-i7d6LnD91N7YPAZSPzfSMlvBkdyav9GzCoS35b88ErejyJs8lkqRCyauEOqn9bxzFi_mfCQIZAulxuOsBi9f3ClOrjaclZvRME",
+    "access_token": "xxxxyyyyy_mfCQIZAulxuOsBi9f3ClOrjaclZvRME",
     "token_type": "Bearer",
     "expires_in": 1079,
     "scope": "offline data_extensions_read data_extensions_write",
     "soap_instance_url": "https://mcm25c247x1kzhztj9fn7jmtt19m.soap.marketingcloudapis.com/",
     "rest_instance_url": "https://mcm25c247x1kzhztj9fn7jmtt19m.rest.marketingcloudapis.com/"
 }
+
 ----------------------
-Step3:
+Step4:
+-----
+
 Then use the token in the header to insert data into DataExtention as explained in link below.
 https://developer.salesforce.com/docs/atlas.en-us.noversion.mc-apis.meta/mc-apis/insertDataExtensionIDAsync.htm
 
@@ -71,12 +82,14 @@ Request body format:
 }
 ]
 ------------------------------------
-Step4:
+Step5:
+------
 Check the marketing cloud org and the data should be inseterd in the Data extension.
 ---------------------------------------------------POSTMAN ------------------------------------------------------------
 
 Could implent the same from PostMan client:
 Step1:
+----
 POST /v2/token HTTP/1.1
 Host: mcm25c247x1kzhztj9fn7jmtt19m.auth.marketingcloudapis.com
 Content-Type: application/json
@@ -101,6 +114,7 @@ This will result in
 }
 -------------------------------------------------------------------
 Step2:
+----
 Use the Access_toekn in the next Request to insert data:
 
 POST /hub/v1/dataevents/key:TestDEExternalKey/rowset HTTP/1.1
@@ -132,5 +146,6 @@ Data would be inserted in the sfmc DE.
 
 ------------------------------------
 Incase of errors:
+-----
 plese refere to sfmc API error code docs.
 https://developer.salesforce.com/docs/atlas.en-us.mc-apis.meta/mc-apis/error-handling.htm
