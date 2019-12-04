@@ -80,19 +80,25 @@ Request body format:
 
 [
 {
-	"keys":{
+	"keys":
+	{
 		"Email": "someone@example.com"
-		},
-	"values":{
+		}
+		,
+	"values":
+	{
 		"Gender": "Male"
 	}
 }
 ,
 {
-	"keys":{
+	"keys":
+	{
 		"Email": "someone2@example.com"
-		},
-	"values":{
+		}
+		,
+	"values":
+	{
 		"Gender": "FeMale"
 	}
 }
