@@ -94,16 +94,24 @@ Request body format:
 ------------------------------------
 Step5:
 ------
+
 Check the marketing cloud org and the data should be inseterd in the Data extension.
+
 ---------------------------------------------------POSTMAN ------------------------------------------------------------
 
 Could implent the same from PostMan client:
+
 Step1:
 ----
+
 POST /v2/token HTTP/1.1
+
 Host: mcm25c247x1kzhztj9fn7jmtt19m.auth.marketingcloudapis.com
+
 Content-Type: application/json
+
 Cache-Control: no-cache
+
 Postman-Token: fd5f7d71-235c-ffbf-17f6-41672f9bfbdf
 
 {
@@ -114,6 +122,7 @@ Postman-Token: fd5f7d71-235c-ffbf-17f6-41672f9bfbdf
 }
 
 This will result in
+
 {
     "access_token": "xxxxxxxxxxxYYYYYYYsBi9f3ClOrjaclZvRME",
     "token_type": "Bearer",
@@ -125,15 +134,23 @@ This will result in
 -------------------------------------------------------------------
 Step2:
 ----
+
 Use the Access_toekn in the next Request to insert data:
 
 POST /hub/v1/dataevents/key:TestDEExternalKey/rowset HTTP/1.1
+
 Host: mcxxxxx.rest.marketingcloudapis.com
+
 Content-Type: application/json
+
 Authorization: Bearer xxxxtyyyydddssxOqn9bxzFi_mfCQIZAulxuOsBi9f3ClOrjaclZvRME
+
 Cache-Control: no-cache
+
 Postman-Token: 21590989-e51b-66d1-4774-4f46f7a28f11
+
 body:
+
 [{
 	"keys":{
 		"Email": "someone@example.com"
@@ -157,5 +174,7 @@ Data would be inserted in the sfmc DE.
 ------------------------------------
 Incase of errors:
 -----
+
 plese refere to sfmc API error code docs.
+
 https://developer.salesforce.com/docs/atlas.en-us.mc-apis.meta/mc-apis/error-handling.htm
