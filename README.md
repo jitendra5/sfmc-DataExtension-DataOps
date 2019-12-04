@@ -64,9 +64,13 @@ https://developer.salesforce.com/docs/atlas.en-us.noversion.mc-apis.meta/mc-apis
 
 Set header to:
 
-[{"key":"Content-Type","value":"application/json","description":""},
+[
+{"key":"Content-Type","value":"application/json","description":""},
+
 {"key":"Authorization","value":"Bearer authTokenFromStep2",
-"description":""}]
+
+"description":""}
+]
 
 Post URL:
 
@@ -74,14 +78,16 @@ Host: https://mcxxxxxxx.rest.marketingcloudapis.com/data/v1/async/dataextensions
 
 Request body format:
 
-[{
+[
+{
 	"keys":{
 		"Email": "someone@example.com"
 		},
 	"values":{
 		"Gender": "Male"
 	}
-},
+}
+,
 {
 	"keys":{
 		"Email": "someone2@example.com"
