@@ -1,0 +1,147 @@
+<html>
+
+<head>
+    <title>SFMC Data Extensions.</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div style="">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="">
+                <a class="navbar-brand" style="color: white;">SFMC DataExtension CRED Ops.</a>
+                <a class="navbar-brand" style="color: white;right:0px;position:absolute;">Jitendra</a>
+
+            </div>
+        </nav>
+        <div class="jumbotron" style="padding:40px;">
+                <div class="alert alert-success" role="alert" style="display: none;" id='success'>
+                        The data is inserted successfully!
+                      </div>
+                      <div class="alert alert-danger" role="alert" id='error' style="display: none;">
+                            The data insertion failed!
+                          </div>
+            <div class="row">
+                <div class="col-xs-6">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <h4>Client Id:</h4>
+                                <input type='text' class="form-control" id="clientId" aria-describedby="emailHelp"
+                                    placeholder="Enter ClientId"></input>
+                            </div>
+                            <div class="form-group">
+                                <h4>Client Secret:</h4>
+                                <input type='text' class="form-control" id="clientSec" aria-describedby="emailHelp"
+                                    placeholder="Enter ClientSecret"></input>
+                            </div>
+                            <div class="form-group">
+                                    <h4>Host Name:</h4>
+                                    <input type='text' class="form-control" id="hostName" aria-describedby="emailHelp"
+                                        placeholder="Enter hostName"></input>
+                                </div>
+                            <h4>Enter the External Key for Data Extension:</h4>
+                            <input type="text" class="form-control" id="extKey" aria-describedby="emailHelp"
+                                placeholder="Enter External Key of DE">
+                        </div>
+                        <div class="form-group">
+                            <h4>Enter Json:</h4>
+                            <textarea class="form-control" id="JsonData" aria-describedby="emailHelp"
+                                placeholder="Enter JSON"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="callAPI();">Submit</button>
+                    
+                </div>
+                <div class="col-xs-6">
+                    <p>Sample Json (for a DE with 2 fields Email (Primary Key) and Gender):</p>
+                    <pre><code>[{'keys':{'Email': 'someone500@example.com'},'values':{'Gender': 'Male'}},<br/>
+                      {'keys': {'Email': 'someone400@example.com'},'values':{'Gender': 'FeMale'}}]</code></pre>
+                        <blockquote class="blockquote">
+                                <p class="mb-0">Please do not use double quotes when entering JSON. Try using only single quotes.</p>
+                              </blockquote>
+                              <p>Correct Format:</p>
+                              <pre><code>[{'keys':{'Email':'NoOne1551@gmail.com'},'values':{'Gender':'male'}},<br/>
+                    {'keys':{'Email':'NoOne2552@gmail.com'},'values':{'Gender':'Female'}}]</code></pre>
+                              <p>Wrong Format:</p>
+                              <pre><code>[{"keys":{"Email":"NoOne1551@gmail.com"},"values":{"Gender":"male"}},<br/>
+                                {"keys":{"Email":"NoOne2552@gmail.com"},"values":{"Gender":"Female"}}]</code></pre>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <footer class="page-footer font-small blue">
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2019 Dec Copyright:
+            <a href="http://jitendraaboutsalesforce.blogspot.com/2019/12/salesforce-marketing-cloud-api-insert.html">
+                jitendraaboutsalesforce.blogspot.com</a>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+    <script>
+        function callAPI() {
+
+            var clientId = document.getElementById('clientId').value;
+            var clientSec = document.getElementById('clientSec').value;
+            var extKey = document.getElementById('extKey').value;
+            var JsonData = document.getElementById('JsonData').value;
+            var hostname = document.getElementById('hostName').value;
+
+            console.log('clientId: ' + clientId);
+            console.log('clientSec: ' + clientSec);
+            console.log('extKey: ' + extKey);
+            console.log('JsonData: ' + JsonData);
+            console.log('hostname: ' + hostname);
+
+            var dataO = {};
+            dataO['grant_type'] = 'client_credentials';
+            if (clientId != '' && clientId !== undefined) {
+                dataO['client_id'] = clientId;
+            }
+            if (clientSec != '' && clientSec !== undefined) {
+                dataO['client_secret'] = clientSec;
+            }
+            if (JsonData != '' && JsonData !== undefined) {
+                dataO['jsonData'] = JsonData;
+            }
+            if (extKey != '' && extKey !== undefined) {
+                dataO['extKey'] = extKey;
+            }
+            if (hostname != '' && hostname !== undefined) {
+                dataO['hostname'] = hostname;
+            }
+            console.log(dataO);
+            $.ajax({
+                url: "http://localhost:3000/connectsfmc",
+                type: "POST",
+                dataType: "application/json",
+                data: dataO,
+                success: function (data, status, jqXHR) {
+                    console.log(data);
+                    console.log(status);
+                    window.alert("Local success callback.");
+                    console.log('Local error callback.');
+                },
+                error: function (jqXHR, status, err) {
+                    console.log(err);
+                    //window.alert("Local error callback.");
+                    console.log('Local error callback.');
+                },
+                complete: function (jqXHR, status) {
+                    window.alert("Local completion callback.");
+                    console.log('Local completion callback.');
+                    document.getElementById('success').style.display='block';
+                    setTimeout(function(){document.getElementById('success').style.display='none';},3000);
+                }
+            })
+        }
+    </Script>
+</body>
+
+</html>

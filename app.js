@@ -2,21 +2,40 @@ var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
 var axios = require('axios');
+const path = require('path');
+const ET_Client = require('sfmc-fuelsdk-node');
+
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var app = express();
 app.use(bodyParser.json({ type: 'application/json' }));
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  //res.send('Hello World!');
+  res.sendFile(path.join(__dirname+'/index.html'));
 });
 app.post('/connectsfmc',urlencodedParser, function (req, res) {
   //console.log(req);
   console.log(req.body);
-  //let sfmcDataExtensionApiUrl ="https://mcm25c247x1kzhztj9fn7jmtt19m.auth.marketingcloudapis.com/data/v1/async/dataextensions/key:TestDEExternalKey/rows";
-  let sfmcDataExtensionApiUrl ='https://mcm25c247x1kzhztj9fn7jmtt19m.rest.marketingcloudapis.com/hub/v1/dataevents/key:TestDEExternalKey/rowset';
-  let getMCAccessToken = function sfmcToken(){
+  var authObj ={};
+  authObj['grant_type'] ='client_credentials';
+  authObj['client_id'] =req.body.client_id;
+  authObj['client_secret'] =req.body.client_secret;
+
+  console.log('authObj: ');
+  console.log(authObj);
+  var dataObj ={};
+  dataObj =req.body.jsonData;
+  console.log('dataObj: '+dataObj);
+  var hostname =req.body.hostname;
+  console.log('hostname: '+hostname);
+  var externalKey =req.body.extKey;
+  console.log('externalKey: '+externalKey);
+
+ let sfmcDataExtensionApiUrl ='https://'+hostname+'.rest.marketingcloudapis.com/hub/v1/dataevents/key:'+externalKey+'/rowset';
+ console.log('sfmcDataExtensionApiUrl: '+sfmcDataExtensionApiUrl); 
+ let getMCAccessToken = function sfmcToken(){
     return new Promise(function(resolve, reject) {
         request.post(
-          'https://mcm25c247x1kzhztj9fn7jmtt19m.auth.marketingcloudapis.com/v2/token',
+          'https://'+hostname+'.auth.marketingcloudapis.com/v2/token',
           { json: req.body },
           function (error, response, body) {
               if (!error && response.statusCode == 200) {
@@ -38,11 +57,12 @@ app.post('/connectsfmc',urlencodedParser, function (req, res) {
       console.log(headers);
       console.log('jsonData-------');
       console.log(jsonData);
-      axios.post(sfmcDataExtensionApiUrl, jsonData, {"headers" : headers})
+      var jsonDataRep = jsonData.replace(/'/g, '"');
+      console.log(jsonDataRep);
+      axios.post(sfmcDataExtensionApiUrl, jsonDataRep, {"headers" : headers})
             .then((response) => {
                 // success
                 console.log("Successfully loaded sample data into Data Extension!");
-
                 resolve(
                 {
                     status: response.status,
@@ -66,7 +86,7 @@ app.post('/connectsfmc',urlencodedParser, function (req, res) {
   getSfmcToken.then(function(token){
     console.log('token here..');
     console.log(token.access_token);
-    let jsonData =[
+    /*let jsonData =[
       {
           "keys":{
                   "Email": "someone500@example.com"
@@ -83,8 +103,8 @@ app.post('/connectsfmc',urlencodedParser, function (req, res) {
                   "Gender": "FeMale"
                   }
       }
-  ]  
-    connectToDE(token.access_token,jsonData).then((resp)=>{
+  ]  */
+    connectToDE(token.access_token,dataObj).then((resp)=>{
       console.log(resp);
       res.send(resp);
     }).catch((resp)=>{
