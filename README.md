@@ -181,6 +181,10 @@ body:
 
 Data would be inserted in the sfmc DE.
 
+can be tested at:
+
+https://insertdatainsfmcde.herokuapp.com/
+
 ------------------------------------
 Incase of errors:
 -----
